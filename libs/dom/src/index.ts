@@ -154,33 +154,43 @@ function registerRippleElementTouchEvents(
   onReleased: OnReleased | undefined,
 ) {
   var presses: number[] = []
+  const isPress = (id: number): boolean => presses.includes(id)
 
   root.addEventListener('touchstart', function (e: TouchEvent) {
     e.preventDefault()
-    for (var i=0;i<e.changedTouches.length;i++) {
-      const touch = e.changedTouches[i]
+
+    spreadTouchEvent(e, (touch) => {
       const position = resolvePosition(root, touch)
       presses.push(touch.identifier)
 
       const stateResolver: StateResolver = () => {
         return {
-          released: !presses.includes(touch.identifier)
+          released: !isPress(touch.identifier)
         }
       }
 
       onPress(position, stateResolver)
-    }
+    })
   })
 
-  const touchEndEvent = (e: TouchEvent) => {
+  const touchEndEvent = (isInterrupted: boolean, e: TouchEvent) => {
     e.preventDefault()
-    for (var i=0;i<e.changedTouches.length;i++) {
-      const touch = e.changedTouches[i]
+    spreadTouchEvent(e, (touch) => {
+      if (isPress(touch.identifier) && onReleased) {
+        onReleased(isInterrupted)
+      }
       presses = presses.filter(itr => itr != touch.identifier)
-    }
+    })
   }
-  root.addEventListener('touchend', touchEndEvent)
-  root.addEventListener('touchcancel', touchEndEvent)
+
+  root.addEventListener('touchend', (e: TouchEvent) => { touchEndEvent(false, e) })
+  root.addEventListener('touchcancel', (e: TouchEvent) => { touchEndEvent(true, e) })
+}
+
+export function spreadTouchEvent(e: TouchEvent, map: (touch: Touch) => void) {
+  for (var i=0;i<e.changedTouches.length;i++) {
+    map(e.changedTouches[i])
+  }
 }
 
 function createCanvas(root: Element): HTMLCanvasElement {
