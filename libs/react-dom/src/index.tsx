@@ -18,11 +18,20 @@ export type RippleEffectProps<K extends keyof HTMLElementTagNameMap> = {
   style?: React.CSSProperties,
 }
 
+type LocalCanvas = {
+  type: 'mouse' | 'touch',
+  id: string,
+  position: Position,
+  keyPrefix: string,
+}
+
 export function RippleEffect<K extends keyof HTMLElementTagNameMap>(
   props: React.PropsWithChildren<RippleEffectProps<K>>
 ): ReactElement {
   const [rootReleased, setRootReleased] = useState<boolean>(false)
-  const mouseCanvasesRef = useRef<[string, Position][]>([])
+  const mouseCanvasesRef = useRef<LocalCanvas[]>([])
+  const touchCanvasesRef = useRef<LocalCanvas[]>([])
+  const holdTouchesRef = useRef<string[]>([])
   const setLastCanvasesUpdatedAt = useState<number | undefined>(undefined)[1]
 
   const style = useMemo(() => {
@@ -32,6 +41,7 @@ export function RippleEffect<K extends keyof HTMLElementTagNameMap>(
       position: props.theme.position,
       overflow: props.theme.overflow,
       cursor: props.theme.cursor,
+      WebkitTapHighlightColor: props.theme.webkitTapHighlightColor,
     }
   }, [props.theme, props.style])
 
@@ -44,10 +54,12 @@ export function RippleEffect<K extends keyof HTMLElementTagNameMap>(
     if (node instanceof Element) {
       mouseCanvasesRef.current = [
         ...mouseCanvasesRef.current,
-        [
-          new Date().getTime().toFixed(),
-          resolvePosition(node, e),
-        ]
+        {
+          type: 'mouse',
+          id: new Date().getTime().toFixed(),
+          position: resolvePosition(node, e),
+          keyPrefix: '',
+        }
       ]
       setLastCanvasesUpdatedAt(new Date().getTime())
     } else {
@@ -61,11 +73,79 @@ export function RippleEffect<K extends keyof HTMLElementTagNameMap>(
     setRootReleased(true)
   }, [])
 
-  const onCompleted = useCallback((identifier: string) => {
-    mouseCanvasesRef.current =
-      mouseCanvasesRef.current.filter(itr => itr[0] != identifier)
+  const touchStart = useCallback((e: TouchEvent) => {
+    e.preventDefault()
+
+    const node =
+      rootRef.current ? ReactDOM.findDOMNode(rootRef.current) : undefined
+
+    if (node instanceof Element) {
+      for (var i=0;i<e.changedTouches.length;i++) {
+        const touch = e.changedTouches[i]
+        const id = String(touch.identifier)
+
+        touchCanvasesRef.current = [
+          ...touchCanvasesRef.current,
+          {
+            type: 'touch',
+            id: id,
+            position: resolvePosition(node, touch),
+            keyPrefix: new Date().getTime().toFixed()
+          }
+        ]
+
+        holdTouchesRef.current = [
+          ...holdTouchesRef.current,
+          id,
+        ]
+
+        setLastCanvasesUpdatedAt(new Date().getTime())
+      }
+    } else {
+      throw new Error('Illegal element type.')
+    }
+  }, [])
+
+  const touchEnd = useCallback((e: TouchEvent) => {
+    e.preventDefault()
+
+    for (var i=0;i<e.changedTouches.length;i++) {
+      const touch = e.changedTouches[i]
+      const id = String(touch.identifier)
+
+      holdTouchesRef.current =
+        holdTouchesRef.current.filter(itr => itr != id)
+    }
+
     setLastCanvasesUpdatedAt(new Date().getTime())
   }, [])
+
+  const onCompleted = useCallback((identifier: string) => {
+    mouseCanvasesRef.current =
+      mouseCanvasesRef.current.filter(itr => itr[1] != identifier)
+    touchCanvasesRef.current =
+      touchCanvasesRef.current.filter(itr => itr[1] != identifier)
+    setLastCanvasesUpdatedAt(new Date().getTime())
+  }, [])
+
+  useEffect(() => {
+    const node =
+      rootRef.current ? ReactDOM.findDOMNode(rootRef.current) : undefined
+
+    if (node) {
+      node.addEventListener('touchstart', touchStart, { passive: false, })
+      node.addEventListener('touchend', touchEnd, { passive: false, })
+      node.addEventListener('touchcancel', touchEnd, { passive: false, })
+    }
+
+    return () => {
+      if (node) {
+        node.removeEventListener('touchstart', touchStart)
+        node.removeEventListener('touchend', touchEnd)
+        node.removeEventListener('touchcancel', touchEnd)
+      }
+    }
+  }, [rootRef, rootRef.current, touchStart, touchEnd])
 
   return React.createElement(props.as, {
     ref: rootRef,
@@ -75,14 +155,18 @@ export function RippleEffect<K extends keyof HTMLElementTagNameMap>(
     onMouseLeave: mouseRelease,
   }, [
     props.children,
-    mouseCanvasesRef.current.map(canvas => {
+    [...mouseCanvasesRef.current, ...touchCanvasesRef.current].map(canvas => {
       return <RippleEffectCanvas
-        key={canvas[0]}
-        identifier={canvas[0]}
+        key={`${canvas.keyPrefix}-${canvas.id}`}
+        identifier={canvas.id}
         rootRef={rootRef}
-        position={canvas[1]}
+        position={canvas.position}
         theme={props.theme}
-        isRootReleased={rootReleased}
+        isRootReleased={
+          canvas.type == 'mouse' ?
+            rootReleased :
+            !(holdTouchesRef.current.includes(canvas.id))
+        }
         onCompleted={onCompleted}
         />
     })
