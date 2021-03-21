@@ -50,17 +50,18 @@
           }
         },
         "build": {
-          "executor": "@nrwl/node:package",
+          "executor": "@nrwl/web:package",
           "outputs": [
             "{options.outputPath}"
           ],
           "options": {
             "outputPath": "dist/libs/canvas",
             "tsConfig": "libs/canvas/tsconfig.lib.json",
-            "packageJson": "libs/canvas/package.json",
-            "main": "libs/canvas/src/index.ts",
+            "project": "libs/canvas/package.json",
+            "entryFile": "libs/canvas/src/index.ts",
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
             "assets": [
-              "libs/canvas/*.md"
             ]
           }
         }
@@ -225,17 +226,18 @@
           }
         },
         "build": {
-          "executor": "@nrwl/node:package",
+          "executor": "@nrwl/web:package",
           "outputs": [
             "{options.outputPath}"
           ],
           "options": {
             "outputPath": "dist/libs/dom",
             "tsConfig": "libs/dom/tsconfig.lib.json",
-            "packageJson": "libs/dom/package.json",
-            "main": "libs/dom/src/index.ts",
+            "project": "libs/dom/package.json",
+            "entryFile": "libs/dom/src/index.ts",
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
             "assets": [
-              "libs/dom/*.md"
             ]
           }
         }
@@ -277,7 +279,6 @@
             "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
             "assets": [
-              "libs/react-dom/*.md"
             ]
           }
         }
