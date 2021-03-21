@@ -1,4 +1,7 @@
 {
   "private": false,
-  "name": "@rippleeffect/canvas"
+  "name": "@rippleeffect/canvas",
+  "devDependencies": {
+    "@types/node": "^14.14.35"
+  }
 }

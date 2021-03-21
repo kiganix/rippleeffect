@@ -1,4 +1,10 @@
 {
   "private": false,
-  "name": "@rippleeffect/react-dom"
+  "name": "@rippleeffect/react-dom",
+  "devDependencies": {
+    "@types/node": "^14.14.35",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.2",
+    "csstype": "^3.0.7"
+  }
 }
