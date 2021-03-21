@@ -8,6 +8,8 @@
     "build": "nx run-many --target=build --projects=canvas,dom,react-dom",
     "start:dom-example": "nx run dom-example:serve",
     "start:next-example": "nx run next-example:serve",
+    "build:dom-example": "nx run dom-example:build",
+    "build:next-example": "nx run next-example:build && npm --prefix=dist/apps/next-example install",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
