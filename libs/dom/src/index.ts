@@ -34,20 +34,33 @@ export function resolvePosition(element: Element, e: MouseEvent | Touch): Positi
   }
 }
 
+export type OnReleased =
+  (isInterruped: boolean) => void
+
+export type Options = {
+  theme: Theme,
+  onReleased: OnReleased | undefined,
+}
+
+export const DefaultOptions: Options = {
+  theme: DefaultTheme,
+  onReleased: undefined,
+}
+
 export function createRippleElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
   children?: string | Node,
-  theme: Theme = DefaultTheme,
+  options: Options = DefaultOptions
 ): HTMLElementTagNameMap[K] {
   const root = document.createElement(tagName)
 
-  applyRippleElementStyles(root, theme)
+  applyRippleElementStyles(root, options.theme)
 
   if (children) {
     root.append(children)
   }
 
-  registerRippleElementEvents(root, theme)
+  registerRippleElementEvents(root, options.theme, options.onReleased)
 
   return root
 }
@@ -70,7 +83,8 @@ type OnPress = (
 
 function registerRippleElementEvents(
   root: Element,
-  theme: Theme = DefaultTheme
+  theme: Theme = DefaultTheme,
+  onReleased: OnReleased | undefined,
 ) {
   const onPress = (
     position: Position,
@@ -95,13 +109,14 @@ function registerRippleElementEvents(
     )
   }
 
-  registerRippleElementTouchEvents(root, onPress)
-  registerRippleElementMouseEvents(root, onPress)
+  registerRippleElementTouchEvents(root, onPress, onReleased)
+  registerRippleElementMouseEvents(root, onPress, onReleased)
 }
 
 function registerRippleElementMouseEvents(
   root: Element,
   onPress: OnPress,
+  onReleased: OnReleased | undefined,
 ) {
   const mouseDown = (e: MouseEvent) => {
     var released = false
@@ -114,9 +129,19 @@ function registerRippleElementMouseEvents(
       }
     }
 
-    const releaseEvent = (e: MouseEvent) => { released = true }
-    root.addEventListener('mouseup', releaseEvent, { once: true })
-    root.addEventListener('mouseleave', releaseEvent, { once: true })
+    root.addEventListener('mouseup', () => {
+      if (!released && onReleased) {
+        onReleased(false)
+      }
+      released = true
+    }, { once: true })
+
+    root.addEventListener('mouseleave', () => {
+      if (!released && onReleased) {
+        onReleased(true)
+      }
+      released = true
+    }, { once: true })
 
     onPress(position, stateResolver)
   }
@@ -126,6 +151,7 @@ function registerRippleElementMouseEvents(
 function registerRippleElementTouchEvents(
   root: Element,
   onPress: OnPress,
+  onReleased: OnReleased | undefined,
 ) {
   var presses: number[] = []
 
