@@ -35,7 +35,7 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/canvas/**/*.ts"
+              "libs/canvas/**/*.{ts,tsx,js,jsx}"
             ]
           }
         },
@@ -210,7 +210,7 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/dom/**/*.ts"
+              "libs/dom/**/*.{ts,tsx,js,jsx}"
             ]
           }
         },
