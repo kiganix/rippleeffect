@@ -1,0 +1,29 @@
+name: Publish
+
+on: [ workflow_dispatch ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: npm install
+      - run: npm run build
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          check-version: true
+          package: ./dist/canvas/package.json
+          token: ${{ secrets.NPM_TOKEN }}
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          check-version: true
+          package: ./dist/dom/package.json
+          token: ${{ secrets.NPM_TOKEN }}
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          check-version: true
+          package: ./dist/react-dom/package.json
+          token: ${{ secrets.NPM_TOKEN }}
