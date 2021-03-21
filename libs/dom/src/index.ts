@@ -95,8 +95,8 @@ function registerRippleElementEvents(
     )
   }
 
-  registerRippleElementMouseEvents(root, onPress)
   registerRippleElementTouchEvents(root, onPress)
+  registerRippleElementMouseEvents(root, onPress)
 }
 
 function registerRippleElementMouseEvents(
@@ -130,6 +130,7 @@ function registerRippleElementTouchEvents(
   var presses: number[] = []
 
   root.addEventListener('touchstart', function (e: TouchEvent) {
+    e.preventDefault()
     for (var i=0;i<e.changedTouches.length;i++) {
       const touch = e.changedTouches[i]
       const position = resolvePosition(root, touch)
@@ -146,6 +147,7 @@ function registerRippleElementTouchEvents(
   })
 
   const touchEndEvent = (e: TouchEvent) => {
+    e.preventDefault()
     for (var i=0;i<e.changedTouches.length;i++) {
       const touch = e.changedTouches[i]
       presses = presses.filter(itr => itr != touch.identifier)

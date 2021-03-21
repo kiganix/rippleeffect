@@ -209,7 +209,7 @@ export function startRipple(
   const max = calcMaxRadius(config.areaSize, config.position)
 
   var state: InternalState | undefined = undefined
-  var lastIncreaseRadius: number | undefined = undefined
+  var lastIncreaseRadius: number = 0
 
   const drawFrame: FrameRequestCallback = (performanceTime) => {
     state = createState(state, performanceTime, stateResolver)
