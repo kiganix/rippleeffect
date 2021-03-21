@@ -17,17 +17,17 @@ jobs:
         with:
           check-version: true
           package: ./dist/libs/canvas/package.json
-          access: restricted
+          access: public
           token: ${{ secrets.NPM_TOKEN }}
       - uses: JS-DevTools/npm-publish@v1
         with:
           check-version: true
           package: ./dist/libs/dom/package.json
-          access: restricted
+          access: public
           token: ${{ secrets.NPM_TOKEN }}
       - uses: JS-DevTools/npm-publish@v1
         with:
           check-version: true
           package: ./dist/libs/react-dom/package.json
-          access: restricted
+          access: public
           token: ${{ secrets.NPM_TOKEN }}
