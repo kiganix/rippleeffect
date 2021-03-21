@@ -1,6 +1,7 @@
 {
   "private": false,
   "name": "@rippleeffect/canvas",
+  "repository": "github:kiganix/rippleeffect",
   "devDependencies": {
     "@types/node": "^14.14.35"
   }

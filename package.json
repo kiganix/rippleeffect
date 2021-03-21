@@ -2,6 +2,7 @@
   "private": true,
   "name": "rippleeffect",
   "version": "1.0.0",
+  "repository": "github:kiganix/rippleeffect",
   "scripts": {
     "nx": "nx",
     "build": "nx run-many --target=build --projects=canvas,dom,react-dom",
