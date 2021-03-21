@@ -2,6 +2,7 @@ import React, { ReactElement, ReactInstance, useCallback, useEffect, useMemo, us
 import {
   Theme,
   resolvePosition,
+  Options,
 } from '@rippleeffect/dom'
 import {
   Configuration,
@@ -14,7 +15,7 @@ import ReactDOM from 'react-dom'
 
 export type RippleEffectProps<K extends keyof HTMLElementTagNameMap> = {
   as: K,
-  theme: Theme,
+  options: Options,
   style?: React.CSSProperties,
 }
 
@@ -37,13 +38,13 @@ export function RippleEffect<K extends keyof HTMLElementTagNameMap>(
   const style = useMemo(() => {
     return {
       ...(props.style ? props.style : {}),
-      display: props.theme.display,
-      position: props.theme.position,
-      overflow: props.theme.overflow,
-      cursor: props.theme.cursor,
-      WebkitTapHighlightColor: props.theme.webkitTapHighlightColor,
+      display: props.options.theme.display,
+      position: props.options.theme.position,
+      overflow: props.options.theme.overflow,
+      cursor: props.options.theme.cursor,
+      WebkitTapHighlightColor: props.options.theme.webkitTapHighlightColor,
     }
-  }, [props.theme, props.style])
+  }, [props.options.theme, props.style])
 
   const rootRef = useRef<React.ReactInstance>()
 
@@ -69,9 +70,19 @@ export function RippleEffect<K extends keyof HTMLElementTagNameMap>(
     setRootReleased(false)
   }, [rootRef, rootRef.current])
 
-  const mouseRelease = useCallback((e: MouseEvent) => {
+  const mouseUp = useCallback((e: MouseEvent) => {
+    if (!rootReleased && props.options.onReleased) {
+      props.options.onReleased(false)
+    }
     setRootReleased(true)
-  }, [])
+  }, [rootReleased])
+
+  const mouseLeave = useCallback((e: MouseEvent) => {
+    if (!rootReleased && props.options.onReleased) {
+      props.options.onReleased(true)
+    }
+    setRootReleased(true)
+  }, [rootReleased])
 
   const touchStart = useCallback((e: TouchEvent) => {
     e.preventDefault()
@@ -151,8 +162,8 @@ export function RippleEffect<K extends keyof HTMLElementTagNameMap>(
     ref: rootRef,
     style: style,
     onMouseDown: mouseDown,
-    onMouseUp: mouseRelease,
-    onMouseLeave: mouseRelease,
+    onMouseUp: mouseUp,
+    onMouseLeave: mouseLeave,
   }, [
     props.children,
     [...mouseCanvasesRef.current, ...touchCanvasesRef.current].map(canvas => {
@@ -161,7 +172,7 @@ export function RippleEffect<K extends keyof HTMLElementTagNameMap>(
         identifier={canvas.id}
         rootRef={rootRef}
         position={canvas.position}
-        theme={props.theme}
+        theme={props.options.theme}
         isRootReleased={
           canvas.type == 'mouse' ?
             rootReleased :

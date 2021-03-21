@@ -1,9 +1,10 @@
 import { RippleEffect } from '@rippleeffect/react-dom'
-import { Theme, DefaultTheme } from '@rippleeffect/dom'
+import { Theme, DefaultTheme, Options, DefaultOptions } from '@rippleeffect/dom'
 import { DefaultColor } from '@rippleeffect/canvas'
 import { NextPageContext } from "next";
+import { useMemo, useState } from 'react';
 
-const theme: Theme = {
+const myTheme: Theme = {
   ...DefaultTheme,
   rippleColor: {
     ...DefaultColor,
@@ -11,10 +12,22 @@ const theme: Theme = {
 }
 
 export default function IndexPage(context: NextPageContext) {
+  const [releases, setReleases] = useState<boolean[]>([])
+
+  const myOptions: Options = useMemo(() => {
+    return {
+      ...DefaultOptions,
+      theme: myTheme,
+      onReleased: (isInterrupted) => {
+        setReleases([...releases, isInterrupted])
+      }
+    }
+  }, [myTheme, releases, setReleases])
+
   return <div>
     <RippleEffect
       as="div"
-      theme={theme}
+      options={myOptions}
       style={{
         backgroundColor: '#eee',
         borderRadius: '4px',
@@ -27,5 +40,6 @@ export default function IndexPage(context: NextPageContext) {
       }}>
       <span>Hello World!</span>
     </RippleEffect>
+    {releases.map(itr => <div>isInterrupted: {`${itr}`}</div>)}
   </div>
 }
