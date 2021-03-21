@@ -21,6 +21,7 @@ export class AppElement extends HTMLElement {
     button.style.paddingRight = '24px'
     button.style.paddingTop = '8px'
     button.style.paddingBottom = '8px'
+    button.style.userSelect = 'none'
     this.append(button)
   }
 
