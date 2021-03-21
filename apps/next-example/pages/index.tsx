@@ -40,6 +40,8 @@ export default function IndexPage(context: NextPageContext) {
       }}>
       <span>Hello World!</span>
     </RippleEffect>
-    {releases.map(itr => <div>isInterrupted: {`${itr}`}</div>)}
+    <pre>
+      {releases.map(itr => `isInterrupted: ${itr}`).join("\n")}
+    </pre>
   </div>
 }
