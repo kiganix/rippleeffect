@@ -16,10 +16,25 @@
     }
   },
   "projects": {
-    "canvas": { "tags": [] },
+    "canvas": {
+      "tags": [],
+      "implicitDependencies": [
+      ]
+    },
+    "dom": {
+      "tags": [],
+      "implicitDependencies": [
+        "canvas"
+      ]
+    },
+    "react-dom": {
+      "tags": [],
+      "implicitDependencies": [
+        "canvas",
+        "dom"
+      ]
+    },
     "next-example": { "tags": [] },
-    "dom-example": { "tags": [] },
-    "dom": { "tags": [] },
-    "react-dom": { "tags": [] }
+    "dom-example": { "tags": [] }
   }
 }
