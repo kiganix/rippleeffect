@@ -25,6 +25,9 @@ export default function IndexPage(context: NextPageContext) {
   }, [myTheme, releases, setReleases])
 
   return <div>
+    <p>
+      <a href="https://github.com/kiganix/rippleeffect">kiganix/rippleeffect</a>
+    </p>
     <RippleEffect
       as="div"
       options={myOptions}
