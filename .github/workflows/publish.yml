@@ -15,15 +15,15 @@ jobs:
       - uses: JS-DevTools/npm-publish@v1
         with:
           check-version: true
-          package: ./dist/canvas/package.json
+          package: ./dist/libs/canvas/package.json
           token: ${{ secrets.NPM_TOKEN }}
       - uses: JS-DevTools/npm-publish@v1
         with:
           check-version: true
-          package: ./dist/dom/package.json
+          package: ./dist/libs/dom/package.json
           token: ${{ secrets.NPM_TOKEN }}
       - uses: JS-DevTools/npm-publish@v1
         with:
           check-version: true
-          package: ./dist/react-dom/package.json
+          package: ./dist/libs/react-dom/package.json
           token: ${{ secrets.NPM_TOKEN }}
