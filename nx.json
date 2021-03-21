@@ -1,0 +1,25 @@
+{
+  "implicitDependencies": {
+    "workspace.json": "*",
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "tsconfig.base.json": "*",
+    "tslint.json": "*",
+    ".eslintrc.json": "*",
+    "nx.json": "*"
+  },
+  "affected": { "defaultBase": "main" },
+  "npmScope": "rippleeffect",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": { "cacheableOperations": ["build", "lint", "test", "e2e"] }
+    }
+  },
+  "projects": {
+    "canvas": { "tags": [] },
+    "next-example": { "tags": [] },
+    "dom-example": { "tags": [] },
+    "dom": { "tags": [] },
+    "react-dom": { "tags": [] }
+  }
+}

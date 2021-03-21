@@ -1,0 +1,291 @@
+{
+  "version": 2,
+  "cli": {
+    "defaultCollection": "@nrwl/node"
+  },
+  "defaultProject": "dom-example",
+  "generators": {
+    "@nrwl/next": {
+      "application": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/web:application": {
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/web:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    }
+  },
+  "projects": {
+    "canvas": {
+      "root": "libs/canvas",
+      "sourceRoot": "libs/canvas/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/canvas/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/canvas"
+          ],
+          "options": {
+            "jestConfig": "libs/canvas/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/libs/canvas",
+            "tsConfig": "libs/canvas/tsconfig.lib.json",
+            "packageJson": "libs/canvas/package.json",
+            "main": "libs/canvas/src/index.ts",
+            "assets": [
+              "libs/canvas/*.md"
+            ]
+          }
+        }
+      }
+    },
+    "next-example": {
+      "root": "apps/next-example",
+      "sourceRoot": "apps/next-example",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/next:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "root": "apps/next-example",
+            "outputPath": "dist/apps/next-example"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "next-example:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "next-example:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "executor": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "next-example:build:production"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/next-example"
+          ],
+          "options": {
+            "jestConfig": "apps/next-example/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/next-example/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        }
+      }
+    },
+    "dom-example": {
+      "projectType": "application",
+      "root": "apps/dom-example",
+      "sourceRoot": "apps/dom-example/src",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/dom-example",
+            "index": "apps/dom-example/src/index.html",
+            "main": "apps/dom-example/src/main.ts",
+            "polyfills": "apps/dom-example/src/polyfills.ts",
+            "tsConfig": "apps/dom-example/tsconfig.app.json",
+            "assets": [
+              "apps/dom-example/src/assets"
+            ],
+            "styles": [],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/dom-example/src/environments/environment.ts",
+                  "with": "apps/dom-example/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "dom-example:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "dom-example:build:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/dom-example/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/dom-example"
+          ],
+          "options": {
+            "jestConfig": "apps/dom-example/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "dom": {
+      "root": "libs/dom",
+      "sourceRoot": "libs/dom/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/dom/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/dom"
+          ],
+          "options": {
+            "jestConfig": "libs/dom/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/libs/dom",
+            "tsConfig": "libs/dom/tsconfig.lib.json",
+            "packageJson": "libs/dom/package.json",
+            "main": "libs/dom/src/index.ts",
+            "assets": [
+              "libs/dom/*.md"
+            ]
+          }
+        }
+      }
+    },
+    "react-dom": {
+      "root": "libs/react-dom",
+      "sourceRoot": "libs/react-dom/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/react-dom/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/react-dom"
+          ],
+          "options": {
+            "jestConfig": "libs/react-dom/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/libs/react-dom",
+            "tsConfig": "libs/react-dom/tsconfig.lib.json",
+            "project": "libs/react-dom/package.json",
+            "entryFile": "libs/react-dom/src/index.tsx",
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
