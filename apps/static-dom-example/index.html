@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>@rippleeffect/dom (with UMD)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@rippleeffect/canvas@1.2.2/canvas.umd.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@rippleeffect/dom@1.2.2/dom.umd.js"></script>
+  </head>
+  <body>
+    <p>
+      <a href="https://github.com/kiganix/rippleeffect">kiganix/rippleeffect</a>
+    </p>
+    <script type="text/javascript">
+      const myTheme = {
+        ...RippleEffect_Dom.DefaultTheme,
+        rippleColor: {
+          ...RippleEffect_Canvas.DefaultColor,
+        }
+      }
+
+      const myOptions = {
+        ...RippleEffect_Canvas.DefaultOptions,
+        theme: myTheme,
+        onReleased: (isInterrupted) => {
+          const node = document.createElement('div');
+          node.append(document.createTextNode(`isInterrupted: ${isInterrupted}`))
+          document.body.append(node)
+        }
+      }
+
+      const button = RippleEffect_Dom.createRippleElement('div', 'Hello World!', myOptions)
+      button.style.backgroundColor = '#eee'
+      button.style.borderRadius = '4px'
+      button.style.boxShadow = '0 2px 4px rgba(0, 0, 0, .25)'
+      button.style.paddingLeft = '24px'
+      button.style.paddingRight = '24px'
+      button.style.paddingTop = '8px'
+      button.style.paddingBottom = '8px'
+      button.style.userSelect = 'none'
+      document.body.append(button)
+    </script>
+  </body>
+</html>

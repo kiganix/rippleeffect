@@ -8,6 +8,7 @@
     "build": "nx run-many --target=build --projects=canvas,dom,react-dom",
     "start:dom-example": "nx run dom-example:serve",
     "start:next-example": "nx run next-example:serve",
+    "start:static-dom-example": "http-server apps/static-dom-example -c=-1 ",
     "build:dom-example": "nx run dom-example:build",
     "build:next-example": "nx run next-example:export",
     "test": "nx test",
