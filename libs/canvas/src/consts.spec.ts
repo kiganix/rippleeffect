@@ -1,4 +1,4 @@
-import { DefaultColor } from './consts'
+import { DefaultColor, DefaultTheme } from './consts'
 
 describe('DefaultColor', () => {
 
@@ -21,6 +21,30 @@ describe('DefaultColor', () => {
 
   test('透明度が1以下であることであること', () => {
     expect(DefaultColor.a).toBeLessThanOrEqual(1)
+  })
+
+})
+
+describe('DefaultTheme', () => {
+
+  test.each(Object.keys(DefaultTheme))('%sに何かしら値が設定されていること', (key) => {
+    expect(DefaultTheme[key]).toBeDefined()
+  })
+
+  test('rippleColorがDefaultColorであること', () => {
+    expect(DefaultTheme.rippleColor).toEqual(DefaultColor)
+  })
+
+  test('各値が0を上回ること', () => {
+    expect(DefaultTheme.lengthInMillis).toBeGreaterThan(0)
+    expect(DefaultTheme.opacityLengthInMillis).toBeGreaterThan(0)
+    expect(DefaultTheme.releaseAcceleration).toBeGreaterThan(0)
+    expect(DefaultTheme.maxReleasedFillLengthInMillis).toBeGreaterThan(0)
+  })
+
+  test('lengthInMillisをreleaseAccelerationで割った秒数よりmaxReleasedFillLengthInMillisのほうが短いこと', () => {
+    expect(DefaultTheme.lengthInMillis / DefaultTheme.releaseAcceleration)
+      .toBeGreaterThanOrEqual(DefaultTheme.maxReleasedFillLengthInMillis)
   })
 
 })
