@@ -2,11 +2,8 @@ import { DefaultColor } from './consts'
 
 describe('DefaultColor', () => {
 
-  test('何かしら値が設定されていること', () => {
-    expect(DefaultColor.r).toBeDefined()
-    expect(DefaultColor.g).toBeDefined()
-    expect(DefaultColor.b).toBeDefined()
-    expect(DefaultColor.a).toBeDefined()
+  test.each(Object.keys(DefaultColor))('%sに何かしら値が設定されていること', (key) => {
+    expect(DefaultColor[key]).toBeDefined()
   })
 
   test('各値が0以上であること', () => {
