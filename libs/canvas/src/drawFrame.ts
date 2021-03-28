@@ -60,12 +60,12 @@ export function calcReleasedRadius(
   lastIncreaseRadius: number,
   progress: number
 ) {
+  const remainingRadius = max - lastIncreaseRadius
+
   return max <= lastIncreaseRadius ? max :
     Math.min(
       max,
-      lastIncreaseRadius + (
-        (max - lastIncreaseRadius) * progress
-      )
+      lastIncreaseRadius + (remainingRadius * progress)
     )
 }
 
