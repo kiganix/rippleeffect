@@ -11,7 +11,7 @@
     "start:static-dom-example": "http-server apps/static-dom-example -c=-1 ",
     "build:dom-example": "nx run dom-example:build",
     "build:next-example": "nx run next-example:export",
-    "test": "nx test",
+    "test": "nx run-many --target=test --projects=canvas",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
     "affected:apps": "nx affected:apps",
