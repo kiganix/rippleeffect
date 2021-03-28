@@ -1,5 +1,4 @@
-import { access } from 'node:fs'
-import { calcTotalProgress, calcRadius, calcMaxFillLength } from './drawFrame'
+import { calcTotalProgress, calcRadius, calcMaxFillLength, calcReleasedRadius } from './drawFrame'
 
 const random = () => Math.random() * (Number.MAX_SAFE_INTEGER - Number.MIN_SAFE_INTEGER) + Number.MIN_SAFE_INTEGER
 
@@ -47,6 +46,17 @@ describe('calcMaxFillLength', () => {
     expect((lengthInMillis - releasedFrame) / releaseAcceleration).toBeGreaterThan(maxReleasedFillLengthInMillis)
 
     expect(calcMaxFillLength(lengthInMillis, releasedFrame, releaseAcceleration, maxReleasedFillLengthInMillis)).toEqual(maxReleasedFillLengthInMillis)
+  })
+
+})
+
+describe('calcReleasedRadius', () => {
+
+  test.each([114514, 2929831, Number.MAX_SAFE_INTEGER])('ロングタップ中に最大サイズ以上となっていた場合、常に最大サイズを返すこと', (lastIncreaseRadius) => {
+    const max = 114514
+    expect(lastIncreaseRadius).toBeGreaterThanOrEqual(max)
+
+    expect(calcReleasedRadius(max, lastIncreaseRadius, random())).toEqual(max)
   })
 
 })
