@@ -31,6 +31,18 @@ describe('createInternalState', () => {
       ).toEqual(0)
     })
 
+    test('pressedFrameが常に0になること', () => {
+      expect(
+        createInternalState(state, 0, stateResolver).pressedFrame
+      ).toEqual(0)
+      expect(
+        createInternalState(state, 114514, stateResolver).pressedFrame
+      ).toEqual(0)
+      expect(
+        createInternalState(state, -114514, stateResolver).pressedFrame
+      ).toEqual(0)
+    })
+
   })
 
 })
