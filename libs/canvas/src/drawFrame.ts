@@ -2,15 +2,24 @@ import { Configuration } from './consts'
 import { drawRipple } from './drawRipple'
 import { InternalState } from './state'
 
+export function calcTotalProgress(
+  currentFrame: number,
+  lengthInMillis: number,
+): number {
+  return currentFrame <= 0 ?
+    0 :
+    currentFrame / lengthInMillis
+}
+
 export function drawLongTapFrame(
   max: number,
   config: Configuration,
   state: InternalState,
 ) {
-  const totalProgress = state.currentFrame <= 0 ?
-    0 :
-    state.currentFrame / config.theme.lengthInMillis
-  const radius = max * Math.min(totalProgress, 1.0)
+  const radius = max * Math.min(
+    calcTotalProgress(state.currentFrame, config.theme.lengthInMillis),
+    1.0
+  )
 
   drawRipple(
     config,
