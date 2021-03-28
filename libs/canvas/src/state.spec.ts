@@ -21,12 +21,6 @@ describe('createInternalState', () => {
       ).toEqual(0)
     })
 
-    test.each([0, 114514, -114514])('pressedFrameが常に0になること', (pt) => {
-      expect(
-        createInternalState(state, pt, stateResolver(false)).pressedFrame
-      ).toEqual(0)
-    })
-
     test.each([0, 114514, -114514])('初回frame時点でreleaseされていない場合、常にreleasedFrameはundefinedになること', (pt) => {
       expect(
         createInternalState(state, pt, stateResolver(false)).releasedFrame
