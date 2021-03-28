@@ -18,7 +18,7 @@ export function createInternalState(
     performanceTime - initialPerformanceTime
 
   const releasedFrame =
-    state && state.releasedFrame ? state.releasedFrame :
+    state && state.releasedFrame !== undefined ? state.releasedFrame :
     externalState.released ? currentFrame : undefined
 
   return {
