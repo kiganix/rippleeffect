@@ -55,6 +55,20 @@ export function calcMaxFillLength(
   )
 }
 
+export function calcReleasedRadius(
+  max: number,
+  lastIncreaseRadius: number,
+  progress: number
+) {
+  return max <= lastIncreaseRadius ? max :
+    Math.min(
+      max,
+      lastIncreaseRadius + (
+        (max - lastIncreaseRadius) * progress
+      )
+    )
+}
+
 export function drawReleasedFrame(
   max: number,
   lastIncreaseRadius: number,
@@ -71,15 +85,11 @@ export function drawReleasedFrame(
   )
 
   const currentReleasedTime = state.currentFrame - state.releasedFrame
-  const radius =
-    max <= lastIncreaseRadius ?
-      max :
-      Math.min(
-        max,
-        lastIncreaseRadius + (
-          (max - lastIncreaseRadius) * (currentReleasedTime / maxFillLength)
-        )
-      )
+  const radius = calcReleasedRadius(
+    max,
+    lastIncreaseRadius,
+    calcTotalProgress(currentReleasedTime, maxFillLength),
+  )
 
   const opacity = currentReleasedTime <= 0 ?
     1 :
