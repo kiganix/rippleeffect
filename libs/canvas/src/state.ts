@@ -22,7 +22,7 @@ export function createInternalState(
     state ? state.pressedFrame : 0
 
   const releasedFrame =
-    state && state.releasedFrame ? state.releasedFrame :
+    state && state.releasedFrame !== undefined ? state.releasedFrame :
     externalState.released ? currentFrame : undefined
 
   return {
