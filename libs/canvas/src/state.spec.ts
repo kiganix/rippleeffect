@@ -9,63 +9,33 @@ describe('createInternalState', () => {
   describe('初回描画につきstateがない場合', () => {
     const state: InternalState | undefined = undefined
 
-    test('initialPerformanceTimeは常に現在のperformanceTimeになること', () => {
+    test.each([0, 114514, -114514])('initialPerformanceTimeは常に現在のperformanceTimeになること', (performanceTime) => {
       expect(
-        createInternalState(state, 0, stateResolver(false)).initialPerformanceTime
-      ).toEqual(0)
-      expect(
-        createInternalState(state, 114514, stateResolver(false)).initialPerformanceTime
-      ).toEqual(114514)
-      expect(
-        createInternalState(state, -114514, stateResolver(false)).initialPerformanceTime
-      ).toEqual(-114514)
+        createInternalState(state, performanceTime, stateResolver(false)).initialPerformanceTime
+      ).toEqual(performanceTime)
     })
 
-    test('currentFrameが常に0になること', () => {
+    test.each([0, 114514, -114514])('currentFrameが常に0になること', (pt) => {
       expect(
-        createInternalState(state, 0, stateResolver(false)).currentFrame
-      ).toEqual(0)
-      expect(
-        createInternalState(state, 114514, stateResolver(false)).currentFrame
-      ).toEqual(0)
-      expect(
-        createInternalState(state, -114514, stateResolver(false)).currentFrame
+        createInternalState(state, pt, stateResolver(false)).currentFrame
       ).toEqual(0)
     })
 
-    test('pressedFrameが常に0になること', () => {
+    test.each([0, 114514, -114514])('pressedFrameが常に0になること', (pt) => {
       expect(
-        createInternalState(state, 0, stateResolver(false)).pressedFrame
-      ).toEqual(0)
-      expect(
-        createInternalState(state, 114514, stateResolver(false)).pressedFrame
-      ).toEqual(0)
-      expect(
-        createInternalState(state, -114514, stateResolver(false)).pressedFrame
+        createInternalState(state, pt, stateResolver(false)).pressedFrame
       ).toEqual(0)
     })
 
-    test('初回frame時点でreleaseされていない場合、常にreleasedFrameはundefinedになること', () => {
+    test.each([0, 114514, -114514])('初回frame時点でreleaseされていない場合、常にreleasedFrameはundefinedになること', (pt) => {
       expect(
-        createInternalState(state, 0, stateResolver(false)).releasedFrame
-      ).toBeUndefined()
-      expect(
-        createInternalState(state, 114514, stateResolver(false)).releasedFrame
-      ).toBeUndefined()
-      expect(
-        createInternalState(state, -114514, stateResolver(false)).releasedFrame
+        createInternalState(state, pt, stateResolver(false)).releasedFrame
       ).toBeUndefined()
     })
 
-    test('初回frame時点でreleaseされていた場合、常にreleasedFrameは0になること', () => {
+    test.each([0, 114514, -114514])('初回frame時点でreleaseされていた場合、常にreleasedFrameは0になること', (pt) => {
       expect(
-        createInternalState(state, 0, stateResolver(true)).releasedFrame
-      ).toEqual(0)
-      expect(
-        createInternalState(state, 114514, stateResolver(true)).releasedFrame
-      ).toEqual(0)
-      expect(
-        createInternalState(state, -114514, stateResolver(true)).releasedFrame
+        createInternalState(state, pt, stateResolver(true)).releasedFrame
       ).toEqual(0)
     })
 
