@@ -40,6 +40,21 @@ export function drawLongTapFrame(
   return radius
 }
 
+export function calcMaxFillLength(
+  lengthInMillis: number,
+  releasedFrame: number,
+  releaseAcceleration: number,
+  maxReleasedFillLengthInMillis: number,
+): number {
+  return Math.min(
+    Math.max(
+      (lengthInMillis - releasedFrame) / releaseAcceleration,
+      0
+    ),
+    maxReleasedFillLengthInMillis
+  )
+}
+
 export function drawReleasedFrame(
   max: number,
   lastIncreaseRadius: number,
@@ -48,12 +63,11 @@ export function drawReleasedFrame(
 ): {
   opacity: number, radius: number,
 } {
-  const maxFillLength = Math.min(
-    Math.max(
-      (config.theme.lengthInMillis - state.releasedFrame) / config.theme.releaseAcceleration,
-      0
-    ),
-    config.theme.maxReleasedFillLengthInMillis
+  const maxFillLength = calcMaxFillLength(
+    config.theme.lengthInMillis,
+    state.releasedFrame,
+    config.theme.releaseAcceleration,
+    config.theme.maxReleasedFillLengthInMillis,
   )
 
   const currentReleasedTime = state.currentFrame - state.releasedFrame
