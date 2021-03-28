@@ -3,7 +3,6 @@ import { State, StateResolver } from './consts'
 export type InternalState = State & {
   initialPerformanceTime: number,
   currentFrame: number,
-  pressedFrame: number,
   releasedFrame: undefined | number,
 }
 
@@ -18,9 +17,6 @@ export function createInternalState(
   const currentFrame =
     performanceTime - initialPerformanceTime
 
-  const pressedFrame =
-    state ? state.pressedFrame : 0
-
   const releasedFrame =
     state && state.releasedFrame ? state.releasedFrame :
     externalState.released ? currentFrame : undefined
@@ -29,7 +25,6 @@ export function createInternalState(
     ...externalState,
     initialPerformanceTime,
     currentFrame,
-    pressedFrame,
     releasedFrame
   }
 }
