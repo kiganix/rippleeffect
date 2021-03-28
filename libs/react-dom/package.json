@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@rippleeffect/react-dom",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "repository": "github:kiganix/rippleeffect",
   "devDependencies": {
     "@types/node": "^14.14.35",
