@@ -11,14 +11,24 @@ export function calcTotalProgress(
     currentFrame / lengthInMillis
 }
 
+export function calcRadius(
+  max: number,
+  progress: number
+): number {
+  return max * Math.min(
+    progress,
+    1.0
+  )
+}
+
 export function drawLongTapFrame(
   max: number,
   config: Configuration,
   state: InternalState,
 ) {
-  const radius = max * Math.min(
+  const radius = calcRadius(
+    max,
     calcTotalProgress(state.currentFrame, config.theme.lengthInMillis),
-    1.0
   )
 
   drawRipple(
