@@ -19,6 +19,18 @@ describe('createInternalState', () => {
       ).toEqual(-114514)
     })
 
+    test('currentFrameが常に0になること', () => {
+      expect(
+        createInternalState(state, 0, stateResolver).currentFrame
+      ).toEqual(0)
+      expect(
+        createInternalState(state, 114514, stateResolver).currentFrame
+      ).toEqual(0)
+      expect(
+        createInternalState(state, -114514, stateResolver).currentFrame
+      ).toEqual(0)
+    })
+
   })
 
 })
