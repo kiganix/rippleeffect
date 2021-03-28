@@ -1,4 +1,5 @@
-import { calcTotalProgress, calcRadius } from './drawFrame'
+import { access } from 'node:fs'
+import { calcTotalProgress, calcRadius, calcMaxFillLength } from './drawFrame'
 
 const random = () => Math.random() * (Number.MAX_SAFE_INTEGER - Number.MIN_SAFE_INTEGER) + Number.MIN_SAFE_INTEGER
 
@@ -23,6 +24,29 @@ describe('calcRadius', () => {
 
     const max = random()
     expect(calcRadius(max, progress)).toEqual(max)
+  })
+
+})
+
+describe('calcMaxFillLength', () => {
+
+  test.each([150, 114514, Number.MAX_SAFE_INTEGER])('releasedFrameがタップ時間の最大長以上の場合、残fill時間は常に0となること', (releasedFrame) => {
+    const lengthInMillis = 150
+    expect(releasedFrame).toBeGreaterThanOrEqual(lengthInMillis)
+
+    expect(
+      calcMaxFillLength(lengthInMillis, releasedFrame, Math.abs(random()), Math.abs(random()))
+    ).toEqual(0)
+  })
+
+  test.each([Number.MIN_SAFE_INTEGER, 0, 1000])('残fill時間が最長よりも長くなる場合、常に最長までに丸められること', (releasedFrame) => {
+    const lengthInMillis = 2000
+    const releaseAcceleration = 1
+    const maxReleasedFillLengthInMillis = 500
+
+    expect((lengthInMillis - releasedFrame) / releaseAcceleration).toBeGreaterThan(maxReleasedFillLengthInMillis)
+
+    expect(calcMaxFillLength(lengthInMillis, releasedFrame, releaseAcceleration, maxReleasedFillLengthInMillis)).toEqual(maxReleasedFillLengthInMillis)
   })
 
 })
